@@ -195,7 +195,7 @@
 
 - (void)setPagingEnabled:(BOOL)pagingEnabled
 {
-    DDLogWarn(@"do not set pagingEnabled , use paging instead");
+    //@"do not set pagingEnabled , use paging instead"
     return;
 }
 
