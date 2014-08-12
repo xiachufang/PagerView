@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "UIView+EasyFrame.h"
 struct PWMargin {
     CGFloat left;
     CGFloat right;
