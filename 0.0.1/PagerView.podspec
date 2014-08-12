@@ -15,9 +15,9 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "iOSCommon"
+  s.name         = "PagerView"
   s.version      = "0.0.1"
-  s.summary      = "iOS通用库，使用cocoapods做管理"
+  s.summary      = "PagerView"
 
   s.description  = <<-DESC
                    A longer description of iOSCommon in Markdown format.
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "git@github.com:xiachufang/iOSCommon.git", :tag => "0.0.1" }
+  s.source       = { :git => "git@github.com:xiachufang/PagerView.git", :tag => "0.0.1" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -116,7 +116,7 @@ Pod::Spec.new do |s|
   #
 
   # s.framework  = "SomeFramework"
-  s.frameworks = "Foundataion", "UIKit"
+  s.frameworks = "Foundation", "UIKit"
 
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"

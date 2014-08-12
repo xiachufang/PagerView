@@ -10,6 +10,43 @@
 
 @class PagerViewDelegateWrapper;
 
+@interface UIView (EasyFrame)
+@end
+@implementation UIView (EasyFrame)
+
+- (CGRect)setX:(CGFloat)x
+{
+    CGRect frame = self.frame;
+    frame.origin.x = x;
+    self.frame = frame;
+    return self.frame;
+}
+
+- (CGRect)setY:(CGFloat)y
+{
+    CGRect frame = self.frame;
+    frame.origin.y = y;
+    self.frame = frame;
+    return self.frame;
+}
+
+- (CGRect)setWidth:(CGFloat)width
+{
+    CGRect frame = self.frame;
+    frame.size.width = width;
+    self.frame = frame;
+    return self.frame;
+}
+
+- (CGRect)setHeight:(CGFloat)height
+{
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+    return self.frame;
+}
+@end
+
 @interface PagerView ()
 
 @property (strong,nonatomic) NSMutableArray *recyclingViews;
