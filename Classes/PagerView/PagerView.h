@@ -87,6 +87,7 @@ static inline PWMargin PWMarginMake(CGFloat left, CGFloat right)
 - (void)setPageViewBlock:(UIControl *(^)(PagerView *view, NSUInteger index, UIControl *reuseView))getPageViewBlock;
 
 - (void)reloadData;
+- (void)scrollPageToVisible:(NSUInteger)pageIndex animated:(BOOL)animated;
 - (void)deselectAllPages;
 - (void)deselectAllPagesExceptForIndex:(NSUInteger)index;
 - (void)deselectAllPagesExceptForView:(UIControl *)view;
