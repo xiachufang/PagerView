@@ -206,6 +206,8 @@
 
 @implementation PagerView
 
+@synthesize pagingEnabled = _pagingEnabled;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -227,20 +229,23 @@
 
 - (BOOL)isPagingEnabled
 {
-    return NO;
+    NSString *caller = [NSThread callStackSymbols][1];
+    if ([caller rangeOfString:@"UIKit"].location != NSNotFound) {//欺骗 UIKit
+        return NO;
+    }
+    return _pagingEnabled;
 }
 
 - (void)setPagingEnabled:(BOOL)pagingEnabled
 {
-    //@"do not set pagingEnabled , use paging instead"
-    return;
+    _pagingEnabled = pagingEnabled;
 }
 
 - (void)internalSetup
 {
     self.delegateWrapper = [[PagerViewDelegateWrapper alloc]initWithPagerView:self];
     super.delegate = self.delegateWrapper;
-    self.paging = YES;
+    self.pagingEnabled = YES;
     self.clipsToBounds = YES;
     self.showsHorizontalScrollIndicator = NO;
     self.decelerationRate = UIScrollViewDecelerationRateFast;
@@ -249,7 +254,7 @@
     self.recyclingViews = [NSMutableArray array];
     self.pageMargins = [NSMutableDictionary dictionary];
     self.oldPageMargins = [NSMutableDictionary dictionary];
-
+    
     [self reloadData];
 }
 
@@ -275,7 +280,7 @@
         [self willChangeValueForKey:NSStringFromSelector(@selector(currentPageIndex))];
         _currentPageIndex = currentPageIndex;
         [self didChangeValueForKey:NSStringFromSelector(@selector(currentPageIndex))];
-        if (self.notifyPageIndexChangedBlock && self.paging) {
+        if (self.notifyPageIndexChangedBlock && self.pagingEnabled) {
             self.notifyPageIndexChangedBlock(self,_currentPageIndex);
         }
     }
@@ -287,15 +292,15 @@
     if (!CGPointEqualToPoint(old, contentOffset)) {
         if (!(self.isDragging || self.isDecelerating)) {
             NSString *caller = [NSThread callStackSymbols][1];
-            if ([caller rangeOfString:@"UIKit"].location == NSNotFound) {//只接受非UIKit中的方法修改ContentOffset，因为UIKit在尺寸变化前按需调整ContentOffset，但它的调整效果不是我们想要的，我们希望在尺寸变化前ContentOffset不要变，在尺寸变化后我们会重新计算正确的ContentOffset
+            if ([caller rangeOfString:@"UIKit"].location == NSNotFound || [caller rangeOfString:@"_adjustContentOffsetIfNecessary"].location == NSNotFound) {//只接受非UIKit中的方法修改ContentOffset，因为UIKit在尺寸变化前按需调整ContentOffset，但它的调整效果不是我们想要的，我们希望在尺寸变化前ContentOffset不要变，在尺寸变化后我们会重新计算正确的ContentOffset
                 [super setContentOffset:contentOffset];
-                if (self.paging) {
+                if (self.pagingEnabled) {
                     [self updateCurrentPageIndex];
                 }
             }
         }else {
             [super setContentOffset:contentOffset];
-            if (self.paging) {
+            if (self.pagingEnabled) {
                 [self updateCurrentPageIndex];
             }
         }
@@ -481,7 +486,7 @@
 
 - (CGPoint)calculateOnePageContentOffsetWithTargetOffset:(CGPoint)offset
 {
-    if (self.paging) {
+    if (self.pagingEnabled) {
         CGFloat distance = offset.x - self.contentOffset.x ;
         if (self.contentOffset.x <= 0 || self.contentOffset.x >= self.contentSize.width - self.bounds.size.width) {
             CGFloat x = MIN(self.contentSize.width - self.bounds.size.width,MAX(0,self.contentOffset.x));
@@ -513,7 +518,7 @@
         return;
     }
     
-    if (self.paging) {
+    if (self.pagingEnabled) {
         result = [self calculatePageRectForIndex:self.currentPageIndex].origin;
     }else {
         NSUInteger oldIndex = [self calculatePageIndexWithOffset:self.contentOffset pageSize:self.oldPageSize pageMargins:self.oldPageMargins];
@@ -770,6 +775,15 @@
     [self updatePageNumber];
     [self updateContentSize];
     [self loadVisibleViews];
+}
+
+- (void)scrollPageToVisible:(NSUInteger)pageIndex animated:(BOOL)animated
+{
+    if (pageIndex >= self.pageNumber) {
+        return;
+    }
+    CGRect frame = [self calculatePageRectForIndex:pageIndex];
+    [self scrollRectToVisible:frame animated:animated];
 }
 
 - (void)deselectAllPages

@@ -49,11 +49,6 @@ static inline PWMargin PWMarginMake(CGFloat left, CGFloat right)
  **/
 @property (assign,nonatomic,readonly) CGSize pageSize;
 /**
- * 该值决定PagerView时候开启Paging功能，默认值为YES
- @note 为PagerView的PagingEnabled赋值没有任何效果
- **/
-@property (assign,nonatomic) BOOL paging;
-/**
  * 当当前page索引变化时调用的block
  **/
 @property (copy,nonatomic) void(^notifyPageIndexChangedBlock)(PagerView *pager, NSUInteger index);
