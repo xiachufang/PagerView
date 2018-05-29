@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "PagerView"
-  s.version      = "0.0.4"
+  s.version      = "0.0.5"
   s.summary      = "The PagerView is compatible with AutoLayout and iDevice Rotation"
 
   s.description  = <<-DESC

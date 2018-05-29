@@ -374,6 +374,11 @@
     [self setNeedsLayout];
 }
 
+//重写intrinsicContentSize GET方法，解决view大小为0
+- (CGSize)intrinsicContentSize{
+    return self.frame.size;
+}
+
 - (void)updatePageNumber
 {
     self.pageNumber = [self getPageNumberFromDatasource];
